@@ -145,7 +145,8 @@ Table fact_goal_counts {
 
  
 ### 1. Budget and Spend Information
- 
+ <details>
+  
  ```sql
 SELECT 
     c.name AS campaign_name,
@@ -164,7 +165,7 @@ AND d.full_date BETWEEN '2024-10-01' AND '2024-10-19' -- Replace with desired da
 AND h.hour BETWEEN 9 AND 18 -- Replace with desired hour range
 ORDER BY c.name, d.full_date, h.hour;
 
- ```sql
+ ```
 
-
+</details>
 
