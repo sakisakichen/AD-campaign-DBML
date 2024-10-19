@@ -140,3 +140,31 @@ Table fact_goal_counts {
  ```
 
 </details>
+
+## Step 4 :SQL Query
+
+ 
+### 1. Budget and Spend Information
+ 
+ ```sql
+SELECT 
+    c.name AS campaign_name,
+    c.type AS campaign_type,
+    d.full_date,
+    h.hour,
+    fbs.budget,
+    fbs.spend,
+    fbs.month_to_date_spend
+FROM fact_budget_spend fbs
+JOIN campaigns c ON fbs.campaign_id = c.id
+JOIN date_dim d ON fbs.date_id = d.id
+JOIN hour_dim h ON fbs.hour_id = h.id
+WHERE c.type = 'Search' -- Replace with desired campaign type filter
+AND d.full_date BETWEEN '2024-10-01' AND '2024-10-19' -- Replace with desired date range
+AND h.hour BETWEEN 9 AND 18 -- Replace with desired hour range
+ORDER BY c.name, d.full_date, h.hour;
+
+ ```sql
+
+
+
