@@ -160,12 +160,85 @@ FROM fact_budget_spend fbs
 JOIN campaigns c ON fbs.campaign_id = c.id
 JOIN date_dim d ON fbs.date_id = d.id
 JOIN hour_dim h ON fbs.hour_id = h.id
-WHERE c.type = 'Search' -- Replace with desired campaign type filter
-AND d.full_date BETWEEN '2024-10-01' AND '2024-10-19' -- Replace with desired date range
-AND h.hour BETWEEN 9 AND 18 -- Replace with desired hour range
-ORDER BY c.name, d.full_date, h.hour;
+WHERE c.type = 'Search' --  filter
+AND d.full_date BETWEEN '2024-10-01' AND '2024-10-19' -- filter
+AND h.hour BETWEEN 9 AND 18 -- filter
 
  ```
 
 </details>
 
+
+
+### 2. Impression Share Performance
+ <details>
+  
+ ```sql
+SELECT 
+    c.name AS campaign_name,
+    ag.name AS ad_group_name,
+    d.full_date,
+    h.hour,
+    fis.impression_share,
+    fis.absolute_top_impression_share,
+    fis.impressions_received,
+    fis.eligible_impressions
+FROM fact_impression_share fis
+JOIN campaigns c ON fis.campaign_id = c.id
+JOIN ad_groups ag ON fis.ad_group_id = ag.id
+JOIN date_dim d ON fis.date_id = d.id
+JOIN hour_dim h ON fis.hour_id = h.id
+WHERE c.type = 'Display' -- filter
+AND d.full_date = '2024-10-18' -- filter
+
+
+ ```
+
+</details>
+
+### 3. View Through Conversions by Ad Group Type and Keyword
+ <details>
+  
+ ```sql
+
+SELECT 
+    c.name AS campaign_name,
+    ag.name AS ad_group_name,
+    k.keyword,
+    k.match_type,
+    d.full_date,
+    h.hour,
+    fvtc.view_through_conversions
+FROM fact_view_through_conversions fvtc
+JOIN campaigns c ON fvtc.campaign_id = c.id
+JOIN ad_groups ag ON fvtc.ad_group_id = ag.id
+JOIN keywords k ON fvtc.keyword_id = k.id
+JOIN date_dim d ON fvtc.date_id = d.id
+JOIN hour_dim h ON fvtc.hour_id = h.id
+WHERE c.type = 'Social Media'  -- filter
+AND ag.bid_strategy_type = 'Maximize Clicks'  -- filter
+
+ ```
+</details>
+
+
+
+### 4. Goal Counts
+ <details>
+  
+ ```sql
+
+SELECT 
+    c.name AS campaign_name,
+    d.full_date,
+    h.hour,
+    fgc.goals_count
+FROM fact_goal_counts fgc
+JOIN campaigns c ON fgc.campaign_id = c.id
+JOIN date_dim d ON fgc.date_id = d.id
+JOIN hour_dim h ON fgc.hour_id = h.id
+WHERE c.type = 'Search' -- filter
+AND d.full_date BETWEEN '2024-10-01' AND '2024-10-19' -- filter
+
+ ```
+</details>
